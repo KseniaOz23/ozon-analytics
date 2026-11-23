@@ -1,4 +1,11 @@
+lxml
 requests
 pandas
-PyYAML
-lxml
+pyyaml
+cbrapi
+SQLAlchemy
+psycopg2-binary
+tenacity
+scikit-learn
+lightgbm
+apache-airflow
