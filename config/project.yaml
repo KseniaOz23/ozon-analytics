@@ -1,0 +1,16 @@
+moex:
+  ticker: OZON
+  start: "2026-01-01"
+  end: "2026-03-31"
+
+cbr:
+  date_req: "31/03/2026"
+  key_rate_from: "2026-01-01"
+  key_rate_to: "2026-03-31"
+
+database:
+  host: localhost
+  port: 5432
+  name: ozon_analytics
+  user: postgres
+  password: postgres
