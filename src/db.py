@@ -5,7 +5,7 @@ from src.config import load_config
 def get_db_engine():
     cfg = load_config("config/project.yaml")["database"]
     # Строка подключения для psycopg2
-    conn_str = f"postgresql://{cfg['user']}:{cfg['password']}@{cfg['host']}:{cfg['port']}/{cfg['name']}"
+    conn_str = f"postgresql+psycopg2://{cfg['user']}:{cfg['password']}@{cfg['host']}:{cfg['port']}/{cfg['name']}?client_encoding=utf8"
     return create_engine(conn_str)
 
 def get_session():
