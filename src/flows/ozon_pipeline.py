@@ -89,6 +89,6 @@ if __name__ == "__main__":
     # Запуск пайплайна по расписанию (каждый день в 00:00)
     ozon_pipeline.serve(
         name="daily-ozon-pipeline",
-        cron="0 0 * * *",  # Каждый день в полночь
+        cron="0 0 * * *",
         tags=["ozon", "daily"]
     )

@@ -19,9 +19,6 @@ def run_dq_checks():
             log_etl_end(log_id, "SUCCESS", 0)
             return
 
-        # ==========================================
-        # 1. ПОЛНОТА (Completeness)
-        # ==========================================
         # Проверяем, что в витрине нет пропусков в ключевых колонках
         critical_cols = ["close_price", "volume", "key_rate"]
         missing_counts = df_gold[critical_cols].isna().sum()
@@ -30,17 +27,11 @@ def run_dq_checks():
             details = f"Пропусков в {col}: {count}"
             results.append(("gold.mart_daily_metrics", "completeness", status, details))
 
-        # ==========================================
-        # 2. УНИКАЛЬНОСТЬ (Uniqueness)
-        # ==========================================
         # Проверяем, что trade_date уникальна в витрине
         dup_count = df_gold.duplicated(subset=["trade_date"]).sum()
         status = "PASSED" if dup_count == 0 else "FAILED"
         results.append(("gold.mart_daily_metrics", "uniqueness", status, f"Дубликатов по trade_date: {dup_count}"))
 
-        # ==========================================
-        # 3. ДОПУСТИМОСТЬ ЗНАЧЕНИЙ (Validity)
-        # ==========================================
         # Цена и объем должны быть больше нуля
         invalid_prices = (df_gold["close_price"] <= 0).sum()
         invalid_volumes = (df_gold["volume"] <= 0).sum()
@@ -48,35 +39,23 @@ def run_dq_checks():
         results.append(("gold.mart_daily_metrics", "validity", status, 
                         f"Цен <= 0: {invalid_prices}, Объемов <= 0: {invalid_volumes}"))
 
-        # ==========================================
-        # 4. СООТВЕТСТВИЕ ТИПАМ (Data Types)
-        # ==========================================
         # Проверяем, что колонки имеют правильный тип (в базе это уже гарантировано схемой, 
         # но проверим в pandas)
         type_ok = pd.api.types.is_numeric_dtype(df_gold["close_price"]) and pd.api.types.is_numeric_dtype(df_gold["volume"])
         status = "PASSED" if type_ok else "FAILED"
         results.append(("gold.mart_daily_metrics", "data_types", status, f"Типы данных корректны: {type_ok}"))
 
-        # ==========================================
-        # 5. СООТВЕТСТВИЕ ДИАПАЗОНАМ (Range)
-        # ==========================================
         # Цена акции OZON в разумных пределах (например, от 1000 до 10000 руб.)
         out_of_range = ((df_gold["close_price"] < 1000) | (df_gold["close_price"] > 10000)).sum()
         status = "PASSED" if out_of_range == 0 else "FAILED"
         results.append(("gold.mart_daily_metrics", "range", status, f"Цен вне диапазона [1000, 10000]: {out_of_range}"))
 
-        # ==========================================
-        # 6. ССЫЛОЧНАЯ ЦЕЛОСТНОСТЬ (Referential Integrity)
-        # ==========================================
         # Проверяем, что все тикеры в витрине есть в справочнике (у нас пока один тикер, 
         # но проверим, что он не пустой)
         null_tickers = df_gold["ticker"].isna().sum()
         status = "PASSED" if null_tickers == 0 else "FAILED"
         results.append(("gold.mart_daily_metrics", "referential_integrity", status, f"Пустых тикеров: {null_tickers}"))
 
-        # ==========================================
-        # 7. АКТУАЛЬНОСТЬ (Freshness)
-        # ==========================================
         # Проверяем, что последняя дата в витрине не старше 5 дней от сегодняшней
         max_date = pd.to_datetime(df_gold["trade_date"]).max().date()
         today = pd.Timestamp.today().date()
@@ -84,9 +63,6 @@ def run_dq_checks():
         status = "PASSED" if days_diff <= 5 else "FAILED"
         results.append(("gold.mart_daily_metrics", "freshness", status, f"Последняя дата: {max_date}, дней назад: {days_diff}"))
 
-        # ==========================================
-        # СОХРАНЕНИЕ РЕЗУЛЬТАТОВ В БД
-        # ==========================================
         with engine.begin() as conn:
             query = text("""
                 INSERT INTO service.dq_results (table_name, check_type, status, details)

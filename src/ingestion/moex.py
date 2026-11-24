@@ -118,10 +118,8 @@ def load_moex_to_bronze(start_date: str = None, end_date: str = None):
         raise e
 
 if __name__ == "__main__":
-    # ЗАПУСК 1: Загружаем неделю (с 1 по 7 октября 2026)
     print("--- ЗАГРУЗКА НЕДЕЛИ ---")
     load_moex_to_bronze(start_date="2026-10-01", end_date="2026-10-07")
     
-    # ЗАПУСК 2: Загружаем сегодня (если не передать даты, возьмет сегодняшнюю)
     print("\n--- ЗАГРУЗКА СЕГОДНЯШНЕГО ДНЯ ---")
     load_moex_to_bronze()

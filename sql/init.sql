@@ -4,9 +4,7 @@ CREATE SCHEMA IF NOT EXISTS silver;
 CREATE SCHEMA IF NOT EXISTS gold;
 CREATE SCHEMA IF NOT EXISTS service;
 
--- ==========================================
 -- СЛОЙ BRONZE (Сырые данные)
--- ==========================================
 CREATE TABLE bronze.raw_moex (
     trade_date DATE,
     ticker VARCHAR(10),
@@ -35,9 +33,7 @@ CREATE TABLE bronze.raw_cbr_currency (
     PRIMARY KEY (rate_date, char_code)
 );
 
--- ==========================================
 -- СЛОЙ SILVER (Очищенные данные)
--- ==========================================
 CREATE TABLE silver.clean_moex (
     trade_date DATE,
     ticker VARCHAR(10),
@@ -57,9 +53,7 @@ CREATE TABLE silver.clean_macro (
     eur_rate FLOAT
 );
 
--- ==========================================
 -- СЛОЙ GOLD (Витрины для аналитики и ML)
--- ==========================================
 CREATE TABLE gold.mart_daily_metrics (
     trade_date DATE PRIMARY KEY,
     ticker VARCHAR(10),
@@ -80,9 +74,7 @@ CREATE TABLE gold.fact_forecast (
     PRIMARY KEY (forecast_date, target_date, ticker, model_name)
 );
 
--- ==========================================
 -- СЛУЖЕБНЫЕ ТАБЛИЦЫ (Метаданные, DQ, Lineage)
--- ==========================================
 CREATE TABLE service.etl_load_log (
     id SERIAL PRIMARY KEY,
     source_name VARCHAR(50),
@@ -110,9 +102,7 @@ CREATE TABLE service.data_lineage (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- ==========================================
 -- SCD2: История изменения ключевой ставки
--- ==========================================
 CREATE TABLE silver.dim_key_rate_history (
     id SERIAL PRIMARY KEY,
     key_rate FLOAT,
