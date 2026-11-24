@@ -121,3 +121,5 @@ CREATE TABLE silver.dim_key_rate_history (
     is_current BOOLEAN DEFAULT TRUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE DATABASE airflow_meta;

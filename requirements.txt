@@ -8,4 +8,3 @@ psycopg2-binary
 tenacity
 scikit-learn
 lightgbm
-apache-airflow
