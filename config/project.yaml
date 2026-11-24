@@ -1,12 +1,11 @@
 moex:
   ticker: OZON
-  start: "2026-01-01"
-  end: "2026-03-31"
+  default_start_date: "2023-10-01" # Дата для первого запуска
+  end_date: "2026-03-31" # Максимальная дата (если None, то берется today)
 
 cbr:
-  date_req: "31/03/2026"
-  key_rate_from: "2026-01-01"
-  key_rate_to: "2026-03-31"
+  default_start_date: "2023-10-01"
+  currency_date_req: "31/03/2026" # Для курсов валют (или можно брать today)
 
 database:
   host: localhost
@@ -14,3 +13,7 @@ database:
   name: ozon_analytics
   user: postgres
   password: postgres
+
+retry:
+  max_attempts: 5
+  wait_seconds: 5
