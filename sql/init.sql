@@ -109,3 +109,15 @@ CREATE TABLE service.data_lineage (
     process_name VARCHAR(100),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+-- ==========================================
+-- SCD2: История изменения ключевой ставки
+-- ==========================================
+CREATE TABLE silver.dim_key_rate_history (
+    id SERIAL PRIMARY KEY,
+    key_rate FLOAT,
+    valid_from TIMESTAMP NOT NULL,
+    valid_to TIMESTAMP,
+    is_current BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
